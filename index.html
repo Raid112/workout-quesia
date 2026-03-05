@@ -979,16 +979,14 @@ const App = {
     const prHtml = pr ? `<span class="exercise-pr"><span class="trophy">\u{1F3C6}</span> PR: ${pr}kg</span>` : '<span class="exercise-pr"></span>';
     const isPR = pr && ex.weight && parseFloat(ex.weight) >= pr;
 
-    // Detect "most common" label to mark variants
-    const labelCounts = {};
-    ex.setLabels.forEach(l => { labelCounts[l] = (labelCounts[l] || 0) + 1; });
-    const mostCommon = Object.entries(labelCounts).sort((a, b) => b[1] - a[1])[0][0];
-    const hasVariants = Object.keys(labelCounts).length > 1;
+    // Detect variant sets: sets with pause/bonus are special, otherwise different reps from first set
+    const hasVariants = new Set(ex.setLabels).size > 1;
+    const firstLabel = ex.setLabels[0];
 
     const setButtons = ex.setLabels.map((label, si) => {
       const completed = ex.completedSetIndices.includes(si) ? ' completed' : '';
-      const isVariant = hasVariants && label !== mostCommon ? ' set-variant' : '';
       const parsed = this.parseSetLabel(label);
+      const isVariant = hasVariants && (parsed.pause || parsed.bonus || label !== firstLabel) ? ' set-variant' : '';
       let inner = `<span class="set-reps">${parsed.reps}</span>`;
       if (parsed.pause) inner += `<span class="set-pause">${parsed.pause}</span>`;
       if (parsed.bonus) inner += `<span class="set-bonus">${parsed.bonus}</span>`;
