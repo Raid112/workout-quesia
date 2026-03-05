@@ -285,13 +285,13 @@ body > * { position: relative; z-index: 1; }
   box-shadow: 0 4px 20px rgba(255,183,77,0.15);
 }
 .exercise-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 4px; flex-wrap: wrap; gap: 6px;
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 8px;
 }
-.exercise-name { font-size: 15px; font-weight: 700; font-family: var(--font-display); flex: 1; }
+.exercise-name { font-size: 16px; font-weight: 700; font-family: var(--font-display); }
 .technique-badge {
-  font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px;
-  text-transform: uppercase; letter-spacing: 0.5px;
+  font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
 }
 .technique-badge.rest-pause { background: rgba(255,126,179,0.2); color: var(--accent-pink); border: 1px solid rgba(255,126,179,0.3); }
 .technique-badge.isometria { background: rgba(225,190,231,0.2); color: var(--accent-lilac); border: 1px solid rgba(225,190,231,0.3); }
@@ -303,16 +303,18 @@ body > * { position: relative; z-index: 1; }
 .exercise-pr { font-size: 11px; color: var(--accent-warm); font-weight: 600; font-family: var(--font-display); }
 .exercise-pr .trophy { font-size: 13px; }
 .exercise-weight-input-group {
-  display: flex; align-items: center; gap: 4px;
+  display: flex; align-items: center; gap: 2px;
+  background: rgba(45,27,78,0.6); border-radius: var(--radius-sm);
+  padding: 2px; border: 1px solid rgba(179,136,255,0.15);
 }
 .weight-input {
-  width: 56px; padding: 5px 6px; border-radius: var(--radius-sm);
-  border: 1px solid rgba(179,136,255,0.2); background: rgba(45,27,78,0.8);
-  color: var(--text-primary); font-size: 14px; font-weight: 600;
+  width: 52px; padding: 5px 4px; border-radius: 8px;
+  border: none; background: rgba(45,27,78,0.9);
+  color: var(--text-primary); font-size: 14px; font-weight: 700;
   font-family: var(--font-display); text-align: center;
 }
-.weight-input:focus { outline: none; border-color: var(--accent-pink); }
-.weight-label { font-size: 11px; color: var(--text-muted); }
+.weight-input:focus { outline: none; box-shadow: 0 0 0 1px var(--accent-pink); }
+.weight-label { font-size: 11px; color: var(--text-muted); padding: 0 6px; font-weight: 600; }
 
 .sets-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: stretch; margin-bottom: 6px; }
 .set-btn {
@@ -329,11 +331,13 @@ body > * { position: relative; z-index: 1; }
   color: #2d1b4e; border-color: transparent;
   box-shadow: 0 2px 10px rgba(255,126,179,0.3);
 }
-.set-btn .set-label { font-size: 10px; opacity: 0.7; }
-.set-btn .set-reps { font-size: 14px; font-weight: 700; }
-.set-btn .set-pause { font-size: 9px; opacity: 0.6; }
-.set-btn .set-bonus { font-size: 12px; font-weight: 600; }
-.set-btn.completed .set-label,
+.set-btn.set-variant {
+  border-color: rgba(255,126,179,0.4);
+  background: rgba(255,126,179,0.08);
+}
+.set-btn .set-reps { font-size: 15px; font-weight: 700; }
+.set-btn .set-pause { font-size: 10px; color: var(--accent-purple); font-weight: 600; opacity: 0.9; }
+.set-btn .set-bonus { font-size: 13px; font-weight: 700; color: var(--accent-pink); }
 .set-btn.completed .set-pause { opacity: 0.8; }
 
 .exercise-footer {
@@ -975,13 +979,20 @@ const App = {
     const prHtml = pr ? `<span class="exercise-pr"><span class="trophy">\u{1F3C6}</span> PR: ${pr}kg</span>` : '<span class="exercise-pr"></span>';
     const isPR = pr && ex.weight && parseFloat(ex.weight) >= pr;
 
+    // Detect "most common" label to mark variants
+    const labelCounts = {};
+    ex.setLabels.forEach(l => { labelCounts[l] = (labelCounts[l] || 0) + 1; });
+    const mostCommon = Object.entries(labelCounts).sort((a, b) => b[1] - a[1])[0][0];
+    const hasVariants = Object.keys(labelCounts).length > 1;
+
     const setButtons = ex.setLabels.map((label, si) => {
       const completed = ex.completedSetIndices.includes(si) ? ' completed' : '';
+      const isVariant = hasVariants && label !== mostCommon ? ' set-variant' : '';
       const parsed = this.parseSetLabel(label);
-      let inner = `<span class="set-label">S${si + 1}</span><span class="set-reps">${parsed.reps}</span>`;
-      if (parsed.pause) inner += `<span class="set-pause">\u23F1 ${parsed.pause}</span>`;
+      let inner = `<span class="set-reps">${parsed.reps}</span>`;
+      if (parsed.pause) inner += `<span class="set-pause">${parsed.pause}</span>`;
       if (parsed.bonus) inner += `<span class="set-bonus">${parsed.bonus}</span>`;
-      return `<button class="set-btn${completed}" data-exercise="${idx}" data-set="${si}">${inner}</button>`;
+      return `<button class="set-btn${completed}${isVariant}" data-exercise="${idx}" data-set="${si}">${inner}</button>`;
     }).join('');
 
     return `
