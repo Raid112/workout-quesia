@@ -61,13 +61,15 @@ body > * { position: relative; z-index: 1; }
 /* === STICKERS === */
 .stickers { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 0; overflow: hidden; }
 .sticker {
-  position: absolute; opacity: 0.18; mix-blend-mode: screen;
+  position: absolute; opacity: 0.22;  -webkit-mask-image: radial-gradient(circle, black 35%, transparent 65%);  mask-image: radial-gradient(circle, black 35%, transparent 65%);
   width: 60px; height: 60px; object-fit: contain;
 }
 .sticker.emoji { font-size: 50px; width: auto; height: auto; }
 /* === TRAINING CARD STICKER === */
 .training-pick-card { position: relative; overflow: hidden; }
 .training-card-sticker {
+  -webkit-mask-image: radial-gradient(circle, black 40%, transparent 68%);
+  mask-image: radial-gradient(circle, black 40%, transparent 68%);
   position: absolute; bottom: -4px; right: -4px;
   width: 44px; height: 44px; object-fit: contain;
   opacity: 0.3; pointer-events: none; transform: rotate(12deg);
@@ -75,6 +77,8 @@ body > * { position: relative; z-index: 1; }
 /* === HOME CROWN === */
 .home-crown {
   width: 36px; height: 36px; object-fit: contain;
+  -webkit-mask-image: radial-gradient(circle, black 40%, transparent 68%);
+  mask-image: radial-gradient(circle, black 40%, transparent 68%);
   display: inline-block; vertical-align: middle;
   margin-bottom: 4px; opacity: 0.85;
   filter: drop-shadow(0 2px 6px rgba(255,183,77,0.4));
@@ -87,11 +91,15 @@ body > * { position: relative; z-index: 1; }
 /* === WORKOUT HEADER STICKER === */
 .workout-header-sticker {
   width: 32px; height: 32px; object-fit: contain;
+  -webkit-mask-image: radial-gradient(circle, black 40%, transparent 68%);
+  mask-image: radial-gradient(circle, black 40%, transparent 68%);
   opacity: 0.7; display: inline-block; vertical-align: middle; margin-left: 6px;
 }
 /* === PR CROWN BADGE === */
 .pr-crown {
   width: 18px; height: 18px; object-fit: contain;
+  -webkit-mask-image: radial-gradient(circle, black 45%, transparent 70%);
+  mask-image: radial-gradient(circle, black 45%, transparent 70%);
   vertical-align: middle; margin-left: 2px;
   filter: drop-shadow(0 1px 3px rgba(255,183,77,0.5));
 }
