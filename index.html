@@ -303,18 +303,19 @@ body > * { position: relative; z-index: 1; }
 .exercise-pr { font-size: 11px; color: var(--accent-warm); font-weight: 600; font-family: var(--font-display); }
 .exercise-pr .trophy { font-size: 13px; }
 .exercise-weight-input-group {
-  display: flex; align-items: center; gap: 2px;
-  background: rgba(45,27,78,0.6); border-radius: var(--radius-sm);
-  padding: 2px; border: 1px solid rgba(179,136,255,0.15);
+  display: flex; align-items: center; gap: 0;
+  background: rgba(45,27,78,0.8); border-radius: var(--radius-sm);
+  border: 1px solid rgba(179,136,255,0.2);
+  overflow: hidden;
 }
 .weight-input {
-  width: 52px; padding: 5px 4px; border-radius: 8px;
-  border: none; background: rgba(45,27,78,0.9);
+  width: 48px; padding: 6px 4px; border: none; background: transparent;
   color: var(--text-primary); font-size: 14px; font-weight: 700;
   font-family: var(--font-display); text-align: center;
 }
-.weight-input:focus { outline: none; box-shadow: 0 0 0 1px var(--accent-pink); }
-.weight-label { font-size: 11px; color: var(--text-muted); padding: 0 6px; font-weight: 600; }
+.weight-input:focus { outline: none; }
+.exercise-weight-input-group:focus-within { border-color: var(--accent-pink); }
+.weight-label { font-size: 11px; color: var(--text-muted); padding: 0 8px 0 0; font-weight: 600; }
 
 .sets-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: stretch; margin-bottom: 6px; }
 .set-btn {
@@ -1002,7 +1003,7 @@ const App = {
         <div class="exercise-weight-row">
           ${prHtml}
           <div class="exercise-weight-input-group">
-            <input type="number" class="weight-input" data-exercise="${idx}" step="0.5" placeholder="kg" value="${ex.weight || ''}">
+            <input type="number" class="weight-input" data-exercise="${idx}" step="0.5" placeholder="—" value="${ex.weight || ''}">
             <span class="weight-label">kg</span>
           </div>
         </div>
