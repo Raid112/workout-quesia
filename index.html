@@ -65,6 +65,64 @@ body > * { position: relative; z-index: 1; }
   width: 60px; height: 60px; object-fit: contain;
 }
 .sticker.emoji { font-size: 50px; width: auto; height: auto; }
+/* === TRAINING CARD STICKER === */
+.training-pick-card { position: relative; overflow: hidden; }
+.training-card-sticker {
+  position: absolute; bottom: -4px; right: -4px;
+  width: 44px; height: 44px; object-fit: contain;
+  opacity: 0.3; pointer-events: none; transform: rotate(12deg);
+}
+/* === HOME CROWN === */
+.home-crown {
+  width: 36px; height: 36px; object-fit: contain;
+  display: inline-block; vertical-align: middle;
+  margin-bottom: 4px; opacity: 0.85;
+  filter: drop-shadow(0 2px 6px rgba(255,183,77,0.4));
+  animation: crownBob 3s ease-in-out infinite;
+}
+@keyframes crownBob {
+  0%,100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-4px) rotate(3deg); }
+}
+/* === WORKOUT HEADER STICKER === */
+.workout-header-sticker {
+  width: 32px; height: 32px; object-fit: contain;
+  opacity: 0.7; display: inline-block; vertical-align: middle; margin-left: 6px;
+}
+/* === PR CROWN BADGE === */
+.pr-crown {
+  width: 18px; height: 18px; object-fit: contain;
+  vertical-align: middle; margin-left: 2px;
+  filter: drop-shadow(0 1px 3px rgba(255,183,77,0.5));
+}
+/* === CELEBRATION OVERLAY === */
+.celebration-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 9999; pointer-events: none;
+  background: rgba(45,27,78,0.4);
+  display: flex; align-items: center; justify-content: center;
+  animation: celebFade 3s ease forwards;
+}
+@keyframes celebFade { 0% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+.celebration-text {
+  font-family: var(--font-display); font-size: 28px; font-weight: 700;
+  color: var(--accent-pink); text-align: center;
+  text-shadow: 0 2px 12px rgba(255,126,179,0.5);
+  animation: celebPulse 0.6s ease-in-out infinite alternate;
+}
+@keyframes celebPulse { 0% { transform: scale(1); } 100% { transform: scale(1.08); } }
+.falling-sticker {
+  position: fixed; top: -80px;
+  width: 50px; height: 50px; object-fit: contain;
+  pointer-events: none; z-index: 10000;
+  animation: stickerFall linear forwards;
+}
+@keyframes stickerFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
 
 /* === SCREENS === */
 .screen { display: none; max-width: 500px; margin: 0 auto; animation: fadeIn 0.3s ease; }
@@ -431,21 +489,24 @@ body > * { position: relative; z-index: 1; }
 
   <!-- STICKERS -->
   <div class="stickers">
-    <!-- Replace src with base64 or local file path after AI generation -->
-    <img class="sticker" src="stickers/velma.png" onerror="this.style.display='none'" style="top:5%;left:8%;transform:rotate(-15deg);opacity:0.08" alt="">
-    <img class="sticker" src="stickers/daphne.png" onerror="this.style.display='none'" style="top:14%;right:8%;transform:rotate(12deg);opacity:0.09" alt="">
-    <img class="sticker" src="stickers/scooby.png" onerror="this.style.display='none'" style="top:28%;left:5%;transform:rotate(20deg);opacity:0.07" alt="">
-    <img class="sticker" src="stickers/rapunzel.png" onerror="this.style.display='none'" style="top:38%;right:6%;transform:rotate(-8deg);opacity:0.08" alt="">
-    <img class="sticker" src="stickers/cinderela.png" onerror="this.style.display='none'" style="top:52%;left:10%;transform:rotate(10deg);opacity:0.07" alt="">
-    <img class="sticker" src="stickers/abobora.png" onerror="this.style.display='none'" style="top:58%;right:12%;transform:rotate(-20deg);opacity:0.09" alt="">
-    <img class="sticker" src="stickers/borboleta.png" onerror="this.style.display='none'" style="top:72%;left:6%;transform:rotate(-12deg);opacity:0.06" alt="">
-    <img class="sticker" src="stickers/coroa.png" onerror="this.style.display='none'" style="top:44%;left:50%;transform:rotate(-5deg);opacity:0.06" alt="">
+    <img class="sticker" src="stickers/velma.png" onerror="this.style.display='none'" style="top:3%;left:6%;transform:rotate(-15deg);opacity:0.15;width:75px;height:75px" alt="">
+    <img class="sticker" src="stickers/daphne.png" onerror="this.style.display='none'" style="top:10%;right:5%;transform:rotate(12deg);opacity:0.16;width:70px;height:70px" alt="">
+    <img class="sticker" src="stickers/scooby.png" onerror="this.style.display='none'" style="top:22%;left:3%;transform:rotate(20deg);opacity:0.13;width:80px;height:80px" alt="">
+    <img class="sticker" src="stickers/rapunzel.png" onerror="this.style.display='none'" style="top:32%;right:4%;transform:rotate(-8deg);opacity:0.15;width:70px;height:70px" alt="">
+    <img class="sticker" src="stickers/cinderela.png" onerror="this.style.display='none'" style="top:45%;left:5%;transform:rotate(10deg);opacity:0.14;width:65px;height:65px" alt="">
+    <img class="sticker" src="stickers/abobora.png" onerror="this.style.display='none'" style="top:55%;right:8%;transform:rotate(-20deg);opacity:0.16;width:70px;height:70px" alt="">
+    <img class="sticker" src="stickers/coroa.png" onerror="this.style.display='none'" style="top:42%;left:48%;transform:rotate(-5deg);opacity:0.12;width:60px;height:60px" alt="">
+    <img class="sticker" src="stickers/velma.png" onerror="this.style.display='none'" style="top:65%;right:3%;transform:rotate(18deg);opacity:0.12;width:65px;height:65px" alt="">
+    <img class="sticker" src="stickers/daphne.png" onerror="this.style.display='none'" style="top:75%;left:7%;transform:rotate(-10deg);opacity:0.14;width:70px;height:70px" alt="">
+    <img class="sticker" src="stickers/rapunzel.png" onerror="this.style.display='none'" style="top:85%;right:10%;transform:rotate(15deg);opacity:0.13;width:75px;height:75px" alt="">
+    <img class="sticker" src="stickers/cinderela.png" onerror="this.style.display='none'" style="top:92%;left:3%;transform:rotate(8deg);opacity:0.11;width:60px;height:60px" alt="">
+    <img class="sticker" src="stickers/scooby.png" onerror="this.style.display='none'" style="top:18%;left:45%;transform:rotate(-12deg);opacity:0.10;width:55px;height:55px" alt="">
   </div>
 
   <!-- HOME -->
   <div id="home" class="screen active">
     <div class="home-header">
-      <h1>Treinao da Quesia 💜</h1>
+      <h1><img class="home-crown" src="stickers/coroa.png" alt=""> Treinao da Quesia 💜</h1>
       <div class="subtitle">Do seu amor Caio</div>
       <button class="settings-gear" id="btn-open-settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -573,6 +634,8 @@ const TRAININGS = [
     ]
   }
 ];
+
+const TRAINING_STICKERS = ['stickers/velma.png', 'stickers/daphne.png', 'stickers/rapunzel.png', 'stickers/cinderela.png'];
 
 // ========== STORAGE ==========
 
@@ -792,6 +855,7 @@ const App = {
             </div>
           </div>
           <div class="training-pick-arrow">›</div>
+          <img class="training-card-sticker" src="${TRAINING_STICKERS[i]}" onerror="this.style.display='none'" alt="">
         </div>`;
     }).join('');
 
@@ -887,7 +951,7 @@ const App = {
     const w = this.currentWorkout;
     const tpl = TRAININGS[w.trainingIndex];
     const icon = tpl.icon;
-    document.getElementById('workout-title').textContent = `${icon} ${w.name}`;
+    document.getElementById('workout-title').innerHTML = `${icon} ${w.name} <img class="workout-header-sticker" src="${TRAINING_STICKERS[w.trainingIndex]}" onerror="this.style.display='none'" alt="">`;
 
     // Update rest timer button
     this.updateRestTimerButton();
@@ -982,7 +1046,7 @@ const App = {
     }
 
     const pr = Storage.getPR(ex.name);
-    const prHtml = pr ? `<span class="exercise-pr"><span class="trophy">\u{1F3C6}</span> PR: ${pr}kg</span>` : '<span class="exercise-pr"></span>';
+    const prHtml = pr ? `<span class="exercise-pr"><span class="trophy">\u{1F3C6}</span> PR: ${pr}kg <img class="pr-crown" src="stickers/coroa.png" onerror="this.style.display='none'" alt=""></span>` : '<span class="exercise-pr"></span>';
     const isPR = pr && ex.weight && parseFloat(ex.weight) >= pr;
 
     const setButtons = ex.setLabels.map((label, si) => {
@@ -1119,6 +1183,32 @@ const App = {
 
   // ========== FINISH / CANCEL ==========
 
+  showCelebration(trainingIndex) {
+    const stickers = ['stickers/coroa.png', 'stickers/abobora.png', TRAINING_STICKERS[trainingIndex]];
+    const overlay = document.createElement('div');
+    overlay.className = 'celebration-overlay';
+    overlay.innerHTML = '<div class="celebration-text">\u{1F49C} Arrasou, Quesia! \u{1F49C}</div>';
+    document.body.appendChild(overlay);
+
+    for (let i = 0; i < 18; i++) {
+      const img = document.createElement('img');
+      img.className = 'falling-sticker';
+      img.src = stickers[i % stickers.length];
+      img.onerror = () => img.style.display = 'none';
+      img.style.left = (Math.random() * 90 + 5) + '%';
+      img.style.animationDuration = (1.8 + Math.random() * 1.5) + 's';
+      img.style.animationDelay = (Math.random() * 1.2) + 's';
+      img.style.width = (35 + Math.random() * 30) + 'px';
+      img.style.height = img.style.width;
+      document.body.appendChild(img);
+    }
+
+    setTimeout(() => {
+      overlay.remove();
+      document.querySelectorAll('.falling-sticker').forEach(s => s.remove());
+    }, 3500);
+  },
+
   finishWorkout() {
     if (!this.currentWorkout) return;
     const totalSets = this.currentWorkout.exercises.reduce((a, e) => a + e.sets, 0);
@@ -1146,6 +1236,7 @@ const App = {
     };
 
     Storage.addToHistory(record);
+    this.showCelebration(record.trainingIndex);
 
     record.exercises.forEach(ex => {
       Storage.addWeightEntry(ex.name, ex.weight, record.date);
