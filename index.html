@@ -284,12 +284,95 @@ body > * { position: relative; z-index: 1; }
   max-height: 300px; opacity: 1; padding: 8px 14px 10px;
   border: 1px solid rgba(179,136,255,0.06); border-top: none;
 }
+.history-expand-time { padding: 4px 0 6px; font-size: 11px; color: var(--accent-purple); font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 4px; }
 .history-expand-exercise { padding: 3px 0; font-size: 11px; color: var(--text-muted); }
 .history-expand-exercise span { color: var(--accent-pink); font-weight: 600; }
+.history-delete-btn {
+  background: none; border: none; color: var(--text-muted); font-size: 14px;
+  padding: 6px 8px; cursor: pointer; opacity: 0.5; transition: opacity 0.2s;
+  -webkit-tap-highlight-color: transparent; flex-shrink: 0;
+}
+.history-delete-btn:hover, .history-delete-btn:active { opacity: 1; color: #ff5252; }
 .history-expand-empty {
   text-align: center; padding: 16px; font-size: 13px; color: var(--text-muted);
   font-family: var(--font-display);
 }
+
+/* === CARDIO CARD (HOME) === */
+.cardio-card {
+  background: var(--bg-surface); border-radius: var(--radius-lg);
+  padding: 14px 16px; margin-bottom: 16px;
+  border: 1px solid rgba(179,136,255,0.1);
+}
+.cardio-card-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+}
+.cardio-card-title {
+  font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text-primary);
+}
+.cardio-card-values {
+  font-size: 12px; color: var(--text-muted); font-weight: 600;
+}
+.cardio-card-values strong { color: var(--accent-purple); font-size: 14px; }
+.cardio-bar {
+  height: 10px; background: rgba(45,27,78,0.8); border-radius: 5px; overflow: hidden;
+  border: 1px solid rgba(179,136,255,0.15);
+}
+.cardio-bar-fill {
+  height: 100%; border-radius: 5px; transition: width 0.4s ease;
+  background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+}
+.cardio-bar-fill.complete {
+  background: linear-gradient(90deg, var(--accent-mint), var(--accent-warm));
+}
+.cardio-card-footer {
+  display: flex; align-items: center; justify-content: space-between; margin-top: 8px;
+}
+.cardio-percent { font-size: 11px; font-weight: 700; color: var(--accent-purple); font-family: var(--font-display); }
+.cardio-percent.complete { color: var(--accent-mint); }
+.cardio-reset-btn {
+  background: none; border: 1px solid rgba(179,136,255,0.2); border-radius: var(--radius-sm);
+  color: var(--text-muted); font-size: 11px; padding: 4px 10px; cursor: pointer;
+  font-family: var(--font-display); font-weight: 600; transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.cardio-reset-btn:active { background: rgba(179,136,255,0.15); transform: scale(0.95); }
+
+/* === CARDIO INPUT (WORKOUT) === */
+.cardio-input-section {
+  background: var(--bg-surface); border-radius: var(--radius-lg);
+  padding: 14px 16px; margin-bottom: 12px;
+  border: 1px solid rgba(179,136,255,0.1);
+}
+.cardio-input-label {
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 10px;
+}
+.cardio-quick-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.cardio-quick-btn {
+  padding: 8px 12px; border-radius: var(--radius-sm);
+  border: 1px solid rgba(179,136,255,0.25); background: rgba(45,27,78,0.6);
+  color: var(--text-muted); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s; font-family: var(--font-display);
+  -webkit-tap-highlight-color: transparent;
+}
+.cardio-quick-btn:active { transform: scale(0.95); }
+.cardio-quick-btn.selected {
+  background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+  color: #2d1b4e; border-color: transparent;
+  box-shadow: 0 2px 10px rgba(255,126,179,0.3);
+}
+.cardio-custom-row {
+  display: flex; align-items: center; gap: 8px;
+}
+.cardio-custom-input {
+  width: 60px; padding: 8px 4px; border: none; background: rgba(45,27,78,0.8);
+  border-radius: var(--radius-sm); border: 1px solid rgba(179,136,255,0.2);
+  color: var(--text-primary); font-size: 16px; font-weight: 700;
+  font-family: var(--font-display); text-align: center;
+}
+.cardio-custom-input:focus { outline: none; border-color: var(--accent-pink); }
+.cardio-custom-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
 
 /* === STATS ROW === */
 .stats-row { display: flex; gap: 12px; margin-bottom: 20px; }
@@ -530,6 +613,7 @@ body > * { position: relative; z-index: 1; }
         <div class="stat-label">Ultimo treino</div>
       </div>
     </div>
+    <div id="cardio-progress"></div>
     <div id="history-expand" class="history-expand"></div>
     <div id="training-cards" class="training-cards"></div>
   </div>
@@ -554,6 +638,21 @@ body > * { position: relative; z-index: 1; }
     </div>
     <div id="warmup-container"></div>
     <div id="exercises-container"></div>
+    <div class="cardio-input-section" id="cardio-input-section">
+      <div class="cardio-input-label">🏃 Cardio hoje</div>
+      <div class="cardio-quick-row" id="cardio-quick-row">
+        <button class="cardio-quick-btn" data-min="10">10min</button>
+        <button class="cardio-quick-btn" data-min="15">15min</button>
+        <button class="cardio-quick-btn" data-min="20">20min</button>
+        <button class="cardio-quick-btn" data-min="25">25min</button>
+        <button class="cardio-quick-btn" data-min="30">30min</button>
+      </div>
+      <div class="cardio-custom-row">
+        <span class="cardio-custom-label">Outro:</span>
+        <input type="number" class="cardio-custom-input" id="cardio-custom-input" min="0" step="1" placeholder="—">
+        <span class="cardio-custom-label">min</span>
+      </div>
+    </div>
     <div class="workout-actions">
       <button class="btn btn-danger" id="btn-cancel-workout">CANCELAR</button>
       <button class="btn btn-primary" id="btn-finish-workout">FINALIZAR</button>
@@ -654,7 +753,8 @@ const Storage = {
     IN_PROGRESS: 'wq_in_progress',
     ACTIVE_SCREEN: 'wq_active_screen',
     WEIGHTS: 'wq_weights',
-    WEIGHT_HISTORY: 'wq_weight_history'
+    WEIGHT_HISTORY: 'wq_weight_history',
+    CARDIO: 'wq_cardio'
   },
 
   defaultConfig: { totalCompleted: 0 },
@@ -671,6 +771,10 @@ const Storage = {
   },
   saveHistory(h) { localStorage.setItem(this.KEYS.HISTORY, JSON.stringify(h)); },
   addToHistory(w) { const h = this.getHistory(); h.unshift(w); this.saveHistory(h); },
+  removeFromHistory(index) {
+    const h = this.getHistory();
+    if (index >= 0 && index < h.length) { h.splice(index, 1); this.saveHistory(h); }
+  },
 
   getInProgress() {
     const d = localStorage.getItem(this.KEYS.IN_PROGRESS);
@@ -707,6 +811,20 @@ const Storage = {
     const wh = this.getWeightHistory();
     if (!wh[exercise] || wh[exercise].length === 0) return null;
     return Math.max(...wh[exercise].map(e => e.weight));
+  },
+
+  getCardio() {
+    const d = localStorage.getItem(this.KEYS.CARDIO);
+    return d ? JSON.parse(d) : { total: 0, entries: [] };
+  },
+  addCardioEntry(minutes, date) {
+    const c = this.getCardio();
+    c.total += minutes;
+    c.entries.unshift({ date, minutes });
+    localStorage.setItem(this.KEYS.CARDIO, JSON.stringify(c));
+  },
+  resetCardio() {
+    localStorage.setItem(this.KEYS.CARDIO, JSON.stringify({ total: 0, entries: [] }));
   },
 
   migrateWeightHistory() {
@@ -773,6 +891,24 @@ const App = {
     document.getElementById('btn-back-settings').addEventListener('click', () => {
       this.showScreen('home'); this.updateHomeScreen();
     });
+
+    // Cardio quick buttons
+    document.querySelectorAll('.cardio-quick-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wasSelected = btn.classList.contains('selected');
+        document.querySelectorAll('.cardio-quick-btn').forEach(b => b.classList.remove('selected'));
+        const input = document.getElementById('cardio-custom-input');
+        if (wasSelected) {
+          input.value = '';
+        } else {
+          btn.classList.add('selected');
+          input.value = btn.dataset.min;
+        }
+      });
+    });
+    document.getElementById('cardio-custom-input').addEventListener('input', () => {
+      document.querySelectorAll('.cardio-quick-btn').forEach(b => b.classList.remove('selected'));
+    });
   },
 
   // ========== HOME ==========
@@ -782,6 +918,9 @@ const App = {
     const history = Storage.getHistory();
 
     document.getElementById('stat-total').textContent = config.totalCompleted;
+
+    // Cardio progress
+    this.renderCardioProgress();
 
     // Reset history expand state
     const histExpand = document.getElementById('history-expand');
@@ -875,6 +1014,40 @@ const App = {
     });
   },
 
+  // ========== CARDIO PROGRESS ==========
+
+  renderCardioProgress() {
+    const CARDIO_GOAL = 120; // minutos
+    const cardio = Storage.getCardio();
+    const pct = Math.min(Math.round((cardio.total / CARDIO_GOAL) * 100), 100);
+    const isComplete = cardio.total >= CARDIO_GOAL;
+    const h = Math.floor(cardio.total / 60);
+    const m = cardio.total % 60;
+    const totalStr = h > 0 ? `${h}h${m > 0 ? m + 'min' : ''}` : `${m}min`;
+
+    const container = document.getElementById('cardio-progress');
+    container.innerHTML = `
+      <div class="cardio-card">
+        <div class="cardio-card-header">
+          <div class="cardio-card-title">\u{1F3C3} Cardio</div>
+          <div class="cardio-card-values"><strong>${totalStr}</strong> / 2h</div>
+        </div>
+        <div class="cardio-bar">
+          <div class="cardio-bar-fill${isComplete ? ' complete' : ''}" style="width: ${pct}%"></div>
+        </div>
+        <div class="cardio-card-footer">
+          <span class="cardio-percent${isComplete ? ' complete' : ''}">${isComplete ? '\u2705 Completo!' : pct + '%'}</span>
+          <button class="cardio-reset-btn" id="btn-cardio-reset">\u{1F504} Reiniciar ciclo</button>
+        </div>
+      </div>`;
+
+    document.getElementById('btn-cardio-reset').addEventListener('click', () => {
+      if (!confirm('Reiniciar o cardio? O acumulado volta a zero.')) return;
+      Storage.resetCardio();
+      this.renderCardioProgress();
+    });
+  },
+
   // ========== RENDER HISTORY EXPAND ==========
 
   renderHistoryExpand(history) {
@@ -892,6 +1065,35 @@ const App = {
       const dateStr = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
       const totalSets = entry.exercises.reduce((a, ex) => a + ex.sets, 0);
       const doneSets = entry.exercises.reduce((a, ex) => a + ex.setsCompleted, 0);
+
+      // Horários e duração
+      const startTime = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      let endTime = '';
+      let durationStr = '';
+      if (entry.endDate) {
+        const ed = new Date(entry.endDate);
+        endTime = ed.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        const diffMs = ed.getTime() - d.getTime();
+        const diffMin = Math.round(diffMs / 60000);
+        const h = Math.floor(diffMin / 60);
+        const m = diffMin % 60;
+        durationStr = h > 0 ? `${h}h${m > 0 ? m + 'min' : ''}` : `${m}min`;
+      } else if (entry.duration) {
+        const h = Math.floor(entry.duration / 60);
+        const m = entry.duration % 60;
+        durationStr = h > 0 ? `${h}h${m > 0 ? m + 'min' : ''}` : `${m}min`;
+      } else {
+        durationStr = '?';
+      }
+
+      const timeDetail = entry.endDate
+        ? `<div class="history-expand-time">\u{1F552} ${startTime} \u2192 ${endTime} (${durationStr})</div>`
+        : `<div class="history-expand-time">\u{1F552} ${durationStr}</div>`;
+
+      const cardioLine = entry.cardioMinutes
+        ? `<div class="history-expand-exercise" style="color:var(--accent-mint);font-weight:600">\u{1F3C3} ${entry.cardioMinutes}min cardio</div>`
+        : '';
+
       const exerciseDetail = entry.exercises.map(ex =>
         `<div class="history-expand-exercise">${ex.name} — <span>${ex.weight ? ex.weight + 'kg' : '-'}</span> — ${ex.setsCompleted}/${ex.sets}</div>`
       ).join('');
@@ -903,22 +1105,37 @@ const App = {
             <div class="history-expand-entry-name">${tpl.name}</div>
             <div class="history-expand-entry-meta">
               <span>${dateStr}</span>
-              <span class="dur">${entry.duration || '?'}min</span>
+              <span class="dur">${durationStr}</span>
               <span class="sets">${doneSets}/${totalSets} sets</span>
             </div>
           </div>
+          <button class="history-delete-btn" data-hidx="${idx}" title="Excluir treino">\u{1F5D1}</button>
         </div>
         <div class="history-expand-entry-detail" id="hexp-detail-${idx}">
+          ${timeDetail}
+          ${cardioLine}
           ${exerciseDetail}
         </div>`;
     }).join('');
 
     // Toggle detail on entry click
     container.querySelectorAll('.history-expand-entry').forEach(el => {
-      el.addEventListener('click', () => {
+      el.addEventListener('click', (e) => {
+        if (e.target.closest('.history-delete-btn')) return;
         const idx = el.dataset.hidx;
         const detail = document.getElementById(`hexp-detail-${idx}`);
         detail.classList.toggle('open');
+      });
+    });
+
+    // Delete history entry
+    container.querySelectorAll('.history-delete-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.dataset.hidx);
+        if (!confirm('Excluir este treino do historico?')) return;
+        Storage.removeFromHistory(idx);
+        this.updateHomeScreen();
       });
     });
   },
@@ -960,6 +1177,10 @@ const App = {
     const tpl = TRAININGS[w.trainingIndex];
     const icon = tpl.icon;
     document.getElementById('workout-title').innerHTML = `${icon} ${w.name} <img class="workout-header-sticker" src="${TRAINING_STICKERS[w.trainingIndex]}" onerror="this.style.display='none'" alt="">`;
+
+    // Reset cardio input
+    document.getElementById('cardio-custom-input').value = '';
+    document.querySelectorAll('.cardio-quick-btn').forEach(b => b.classList.remove('selected'));
 
     // Update rest timer button
     this.updateRestTimerButton();
@@ -1227,13 +1448,20 @@ const App = {
     }
 
     const start = new Date(this.currentWorkout.date);
+    const endDate = new Date().toISOString();
     const duration = Math.round((Date.now() - start.getTime()) / 60000);
+
+    // Cardio
+    const cardioInput = document.getElementById('cardio-custom-input');
+    const cardioMinutes = parseInt(cardioInput.value) || 0;
 
     const record = {
       trainingIndex: this.currentWorkout.trainingIndex,
       name: this.currentWorkout.name,
       date: this.currentWorkout.date,
+      endDate: endDate,
       duration: duration,
+      cardioMinutes: cardioMinutes,
       exercises: this.currentWorkout.exercises.map(ex => ({
         name: ex.name,
         weight: ex.weight,
@@ -1244,6 +1472,7 @@ const App = {
     };
 
     Storage.addToHistory(record);
+    if (cardioMinutes > 0) Storage.addCardioEntry(cardioMinutes, record.date);
     this.showCelebration(record.trainingIndex);
 
     record.exercises.forEach(ex => {
