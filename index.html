@@ -293,6 +293,14 @@ body > * { position: relative; z-index: 1; }
   -webkit-tap-highlight-color: transparent; flex-shrink: 0;
 }
 .history-delete-btn:hover, .history-delete-btn:active { opacity: 1; color: #ff5252; }
+.history-show-more-btn {
+  display: block; width: 100%; padding: 10px; margin-top: 8px;
+  background: var(--bg-card); border: 1px dashed var(--accent-pink);
+  color: var(--accent-pink); font-family: var(--font-display);
+  font-size: 12px; font-weight: 600; border-radius: 10px;
+  cursor: pointer; transition: background 0.2s;
+}
+.history-show-more-btn:active { background: var(--bg-deep); }
 .history-expand-empty {
   text-align: center; padding: 16px; font-size: 13px; color: var(--text-muted);
   font-family: var(--font-display);
@@ -1050,17 +1058,19 @@ const App = {
 
   // ========== RENDER HISTORY EXPAND ==========
 
+  historyShowCount: 5,
+
   renderHistoryExpand(history) {
     const container = document.getElementById('history-expand');
-    const last5 = history.slice(0, 5);
+    const visible = history.slice(0, this.historyShowCount);
 
-    if (last5.length === 0) {
+    if (visible.length === 0) {
       container.innerHTML = '<div class="history-expand-empty">Nenhum treino registrado ainda</div>';
       return;
     }
 
-    container.innerHTML = last5.map((entry, idx) => {
-      const tpl = TRAININGS[entry.trainingIndex];
+    container.innerHTML = visible.map((entry, idx) => {
+      const tpl = TRAININGS[entry.trainingIndex] || { icon: '🏋️', name: entry.name || 'Treino removido' };
       const d = new Date(entry.date);
       const dateStr = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' });
       const totalSets = entry.exercises.reduce((a, ex) => a + ex.sets, 0);
@@ -1077,11 +1087,11 @@ const App = {
         const diffMin = Math.round(diffMs / 60000);
         const h = Math.floor(diffMin / 60);
         const m = diffMin % 60;
-        durationStr = h > 0 ? `${h}h${m > 0 ? m + 'min' : ''}` : `${m}min`;
+        durationStr = h > 0 ? `${h}h${m > 0 ? ' ' + m + 'min' : ''}` : `${m}min`;
       } else if (entry.duration) {
         const h = Math.floor(entry.duration / 60);
         const m = entry.duration % 60;
-        durationStr = h > 0 ? `${h}h${m > 0 ? m + 'min' : ''}` : `${m}min`;
+        durationStr = h > 0 ? `${h}h${m > 0 ? ' ' + m + 'min' : ''}` : `${m}min`;
       } else {
         durationStr = '?';
       }
@@ -1117,6 +1127,15 @@ const App = {
           ${exerciseDetail}
         </div>`;
     }).join('');
+
+    // Botão "ver mais"
+    if (history.length > this.historyShowCount) {
+      container.innerHTML += `<button class="history-show-more-btn">Ver mais (${history.length - this.historyShowCount} restantes)</button>`;
+      container.querySelector('.history-show-more-btn').addEventListener('click', () => {
+        this.historyShowCount += 5;
+        this.renderHistoryExpand(history);
+      });
+    }
 
     // Toggle detail on entry click
     container.querySelectorAll('.history-expand-entry').forEach(el => {
