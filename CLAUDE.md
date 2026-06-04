@@ -1,6 +1,4 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+# CLAUDE.md — workout-quesia
 
 ## Project Overview
 
@@ -28,28 +26,27 @@ Não há build, lint, testes ou package.json. O app é servido diretamente como 
 **Arquivo único (`index.html`, ~1280 linhas)** contendo HTML + CSS + JS.
 
 ### Telas (views navegadas por hash)
-- `#home` — Seleção de treino, estatísticas, histórico
-- `#workout` — Execução do treino ativo (séries, pesos, timer de descanso)
+- `#home` — Duas abas (`wq_active_tab`): **Academia** (4 dias A-D) e **Flexibilidade** (3 sessões); estatísticas e histórico separados por aba; card de Cardio compartilhado; aba Flex tem card "Sinais de parada"
+- `#workout` — Execução da sessão ativa (séries, pesos, timer de descanso); sessões de flex não têm peso/PR/cardio, têm headers "Bloco comum"/"Foco do dia" e botões de hold-timer
 - `#settings` — Gerenciamento de dados (export/import/reset)
 
 ### Módulos JS (objetos no escopo global)
-- `TRAININGS` — Array com 4 treinos hardcoded (Coxas Completas, Upper, Glúteo, Coxas), cada um com warmup e exercícios com séries/reps/técnica
-- `Storage` — Camada de persistência via localStorage com keys prefixadas `wq_*` (`wq_config`, `wq_history`, `wq_in_progress`, `wq_weights`, `wq_weight_history`, `wq_active_screen`)
-- `App` — Lógica principal, navegação, event listeners
+- `TRAININGS` — 4 dias de academia hardcoded (A Glúteo+Posterior, B Upper, C Glúteo+Quadríceps, D Upper+Core), com `note` opcional por exercício (proteção de joelho: ROM restrita, profundidade)
+- `FLEX_SESSIONS` — 3 sessões de flexibilidade (Espaçate Frontal, Espaçate Lateral, Dança Ativa); cada uma = `FLEX_COMMON_BLOCK` (bloco comum) + foco; exercícios com `block`, `hold` (segundos do timer) e `rest: null`
+- `Storage` — Persistência via localStorage com keys `wq_*` (`wq_config`, `wq_history`, `wq_flex_history`, `wq_in_progress`, `wq_weights`, `wq_weight_history`, `wq_active_screen`, `wq_active_tab`, `wq_cardio`); migrações de nomes de exercícios em flags `wq_names_v2`/`wq_names_v3`; `getConfig()` faz merge com defaults
+- `App` — Lógica principal, navegação, event listeners; `currentWorkout.type` = `'gym' | 'flex'`
 
 ### PWA
-- `manifest.json` — Config PWA (nome "Treinão da Quesia", tema `#2d1b4e`, standalone)
-- `sw.js` — Service worker com cache `treinao-v1`, estratégia network-first com fallback
-
-### Assets
-- `stickers/` — Imagens PNG 512x512 (estilo chibi/kawaii) usadas como decoração na UI
-- `stickers/PROMPT.md` — Prompts de geração das imagens
+- `manifest.json` — Config PWA (nome "Treinão da Quesia", tema `#0b0710`, standalone)
+- `sw.js` — Service worker com cache `treinao-vN` (bump a cada release), estratégia network-first com fallback
 
 ## Code Conventions
 
-- Sem framework — vanilla JS, CSS Grid/Flexbox, CSS custom properties (`--bg-deep`, `--accent-pink`, etc.)
-- Fontes: Quicksand (display), Nunito (body)
+- Sem framework — vanilla JS, CSS Grid/Flexbox, CSS custom properties (`--bg-deep`, `--gold`, `--purple`, etc.)
+- Estética **dark luxury**: fundo preto-arroxeado `#0b0710`, superfícies roxo profundo, dourado `#d4af37` reservado a ação/conquista (botão primário, stats, PR, sets completos), roxo `#9d7bd8` como suporte
+- Fontes: Cormorant Garamond (display/títulos), Inter (body e **todos os números** — `tabular-nums`; Cormorant tem algarismos proporcionais e faria o timer pular de largura)
+- Ícones dos treinos e da UI: SVG line-art inline (stroke `currentColor` 1.5px, sem fill), definidos no objeto `ICONS`; cor vem do container (`color: var(--gold)`). Sem emojis decorativos
 - Técnicas de exercício: "Rest Pause" e "Isometria" têm highlight visual especial
 - PR (personal record) é detectado automaticamente ao registrar pesos
 - Timer de descanso com contagem visual e notificação sonora
-- Animações de celebração ao completar treino (confetti + stickers caindo)
+- Celebração ao completar treino: overlay serifado dourado + partículas abstratas (losangos ouro / pontos roxos) em CSS
