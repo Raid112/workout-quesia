@@ -41,23 +41,19 @@
 
 body {
   font-family: var(--font-body);
-  background: var(--bg-deep);
+  /* Gradientes decorativos pintados direto no background do body (não como
+     camada fixed semitransparente sobreposta): evita o bug de compositing do
+     Chromium/Android que corrompia a renderização (faixas coloridas na tela). */
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -10%, rgba(157,123,216,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 45% at 88% 105%, rgba(212,175,55,0.05) 0%, transparent 55%),
+    var(--bg-deep);
+  background-repeat: no-repeat;
   color: var(--text-primary);
   min-height: 100vh;
   padding: 16px;
   padding-bottom: 24px;
   overflow-x: hidden;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background:
-    radial-gradient(ellipse 90% 55% at 50% -10%, rgba(157,123,216,0.1) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 45% at 88% 105%, rgba(212,175,55,0.05) 0%, transparent 55%);
-  pointer-events: none;
-  z-index: 0;
 }
 
 body > * { position: relative; z-index: 1; }

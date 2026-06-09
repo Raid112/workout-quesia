@@ -1,4 +1,4 @@
-const CACHE = 'treinao-v4';
+const CACHE = 'treinao-v5';
 const ASSETS = ['/workout-quesia/', '/workout-quesia/index.html', '/workout-quesia/manifest.json', '/workout-quesia/icon-192.png', '/workout-quesia/icon-512.png'];
 
 self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())));
